@@ -39,7 +39,6 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: "Something went wrong!" });
 });
-const PORT = 4001;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+server.listen(4001, () => {
+    console.log(`Server running on port 4001`);
 });
