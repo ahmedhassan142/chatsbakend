@@ -7,5 +7,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const verfiyemail_js_1 = require("../controllers/verfiyemail.js");
 const router = express_1.default.Router();
-router.get("/", verfiyemail_js_1.verifyEmail); // Now accessible at /api/user/verify
+router.get("/verifyemail", verfiyemail_js_1.verifyEmail); // Now accessible at /api/user/verify
 exports.default = router;
