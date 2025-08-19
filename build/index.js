@@ -23,7 +23,7 @@ new wsserver_js_1.WSServer(server);
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatsbakend.onrender.com',
+    origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatingfrontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app',
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "withCredentials"]
@@ -32,7 +32,7 @@ app.use((0, cors_1.default)({
 app.use("/api/user", userroute_js_1.default);
 app.use("/api/avatar", avatarroute_js_1.default);
 app.use("/api/contact", contactroute_js_1.default);
-app.use("/api/user", verifyroute_js_1.default);
+app.use("/api/verify", verifyroute_js_1.default);
 // Error handling
 (0, connect_js_1.default)();
 app.use((err, req, res, next) => {

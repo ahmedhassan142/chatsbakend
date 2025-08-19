@@ -22,7 +22,7 @@ new WSServer(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatsbakend.onrender.com',
+  origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatingfrontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app',
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization","withCredentials"]
@@ -32,7 +32,7 @@ app.use(cors({
 app.use("/api/user", userroute);
 app.use("/api/avatar", avatarroute);
 app.use("/api/contact", contactroute);
-app.use("/api/user", verifyroute);
+app.use("/api/verify", verifyroute);
 
 // Error handling
 connectDB();
