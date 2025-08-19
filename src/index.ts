@@ -22,7 +22,7 @@ new WSServer(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001',
+  origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatsbakend.onrender.com',
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization","withCredentials"]
