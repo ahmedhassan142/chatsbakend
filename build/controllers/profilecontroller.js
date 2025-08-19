@@ -103,28 +103,40 @@ const profileController = (req, res) => __awaiter(void 0, void 0, void 0, functi
 exports.profileController = profileController;
 // Profile Update Controller
 const profileUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a;
     try {
-        const token = ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.authToken) || ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1]);
+        const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
         if (!token) {
-            return res.status(401).json("no token");
+            return res.status(401).json({ error: "Authentication required" });
         }
-        jsonwebtoken_1.default.verify(token, process.env.JWTPRIVATEKEY);
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWTPRIVATEKEY);
         const { firstName, lastName, email, avatarLink } = req.body;
-        const user = yield usermodel_js_1.User.findOne({ email });
+        // Find user by ID from token, not email
+        const user = yield usermodel_js_1.User.findOne({ _id: decoded._id });
         if (!user) {
-            return res.status(404).json("User not found");
+            return res.status(404).json({ error: "User not found" });
         }
+        // Update fields
         user.firstName = firstName;
         user.lastName = lastName;
-        user.email = email;
+        // Don't update email if you want to keep it as identifier
         if (avatarLink)
             user.avatarLink = avatarLink;
         yield user.save();
-        res.json(user);
+        res.json({
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            avatarLink: user.avatarLink
+        });
     }
     catch (err) {
-        res.status(401).json("invalid token");
+        console.error('Profile update error:', err);
+        if (err instanceof jsonwebtoken_1.default.JsonWebTokenError) {
+            return res.status(403).json({ error: "Invalid token" });
+        }
+        res.status(500).json({ error: "Server error" });
     }
 });
 exports.profileUpdate = profileUpdate;

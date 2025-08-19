@@ -118,32 +118,44 @@ export const profileController = async (req: Request, res: Response) => {
 
 // Profile Update Controller
 export const profileUpdate = async (req: Request, res: Response) => {
- 
-
   try {
-     const token = req.cookies?.authToken || req.headers.authorization?.split(" ")[1];
-  
-  if (!token) {
-    return res.status(401).json("no token");
-  }
-    jwt.verify(token, process.env.JWTPRIVATEKEY as string) as JwtPayload;
-    
-    const { firstName, lastName, email, avatarLink } = req.body as UpdateProfileBody;
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json("User not found");
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Authentication required" });
     }
 
+    const decoded = jwt.verify(token, process.env.JWTPRIVATEKEY as string) as JwtPayload;
+    
+    const { firstName, lastName, email, avatarLink } = req.body as UpdateProfileBody;
+    
+    // Find user by ID from token, not email
+    const user = await User.findOne({ _id: decoded._id });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update fields
     user.firstName = firstName;
     user.lastName = lastName;
-    user.email = email;
+    // Don't update email if you want to keep it as identifier
     if (avatarLink) user.avatarLink = avatarLink;
     
     await user.save();
-    res.json(user);
+    
+    res.json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      avatarLink: user.avatarLink
+    });
   } catch (err) {
-    res.status(401).json("invalid token");
+    console.error('Profile update error:', err);
+    if (err instanceof jwt.JsonWebTokenError) {
+      return res.status(403).json({ error: "Invalid token" });
+    }
+    res.status(500).json({ error: "Server error" });
   }
 };
 
