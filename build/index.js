@@ -25,8 +25,8 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: process.env.NEXT_PUBLIC_BASE_URL || 'https://chatingfrontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app',
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "withCredentials"]
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "withCredentials", "X-Requested-With"]
 }));
 // Routes
 app.use("/api/user", userroute_js_1.default);

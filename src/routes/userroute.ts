@@ -35,7 +35,8 @@ router.post("/logout", (req: Request, res: Response) => {
 
 // Profile Routes
 router.get("/profile",  profileController);
-router.put("/profile/update", profileUpdate);
+
+router.patch("/profile/update", profileUpdate);
 
 // People Routes
 router.get("/people", peoplecontroller);

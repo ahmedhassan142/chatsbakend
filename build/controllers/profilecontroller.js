@@ -102,6 +102,7 @@ const profileController = (req, res) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.profileController = profileController;
 // Profile Update Controller
+// Profile Update Controller - Use PATCH method
 const profileUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -110,17 +111,18 @@ const profileUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(401).json({ error: "Authentication required" });
         }
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWTPRIVATEKEY);
-        const { firstName, lastName, email, avatarLink } = req.body;
-        // Find user by ID from token, not email
+        const { firstName, lastName, avatarLink } = req.body;
+        // Find user by ID from token
         const user = yield usermodel_js_1.User.findOne({ _id: decoded._id });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-        // Update fields
-        user.firstName = firstName;
-        user.lastName = lastName;
-        // Don't update email if you want to keep it as identifier
-        if (avatarLink)
+        // Update only provided fields (partial update)
+        if (firstName !== undefined)
+            user.firstName = firstName;
+        if (lastName !== undefined)
+            user.lastName = lastName;
+        if (avatarLink !== undefined)
             user.avatarLink = avatarLink;
         yield user.save();
         res.json({

@@ -117,6 +117,7 @@ export const profileController = async (req: Request, res: Response) => {
 };
 
 // Profile Update Controller
+// Profile Update Controller - Use PATCH method
 export const profileUpdate = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
@@ -126,20 +127,19 @@ export const profileUpdate = async (req: Request, res: Response) => {
 
     const decoded = jwt.verify(token, process.env.JWTPRIVATEKEY as string) as JwtPayload;
     
-    const { firstName, lastName, email, avatarLink } = req.body as UpdateProfileBody;
+    const { firstName, lastName, avatarLink } = req.body as UpdateProfileBody;
     
-    // Find user by ID from token, not email
+    // Find user by ID from token
     const user = await User.findOne({ _id: decoded._id });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Update fields
-    user.firstName = firstName;
-    user.lastName = lastName;
-    // Don't update email if you want to keep it as identifier
-    if (avatarLink) user.avatarLink = avatarLink;
+    // Update only provided fields (partial update)
+    if (firstName !== undefined) user.firstName = firstName;
+    if (lastName !== undefined) user.lastName = lastName;
+    if (avatarLink !== undefined) user.avatarLink = avatarLink;
     
     await user.save();
     
@@ -158,7 +158,6 @@ export const profileUpdate = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
 // Avatar Controllers
 export const getAllAvatars = async (req: Request, res: Response) => {
   try {
