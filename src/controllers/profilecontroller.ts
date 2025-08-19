@@ -118,13 +118,14 @@ export const profileController = async (req: Request, res: Response) => {
 
 // Profile Update Controller
 export const profileUpdate = async (req: Request, res: Response) => {
-  const token = req.cookies?.authToken || req.headers.authorization?.split(" ")[1];
+ 
+
+  try {
+     const token = req.cookies?.authToken || req.headers.authorization?.split(" ")[1];
   
   if (!token) {
     return res.status(401).json("no token");
   }
-
-  try {
     jwt.verify(token, process.env.JWTPRIVATEKEY as string) as JwtPayload;
     
     const { firstName, lastName, email, avatarLink } = req.body as UpdateProfileBody;
