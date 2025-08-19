@@ -48,7 +48,7 @@ interface RegisterRequestBody {
       expiresAt: new Date(Date.now() + 3600000), // 1 hour from now
     }).save();
 
-   const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verifyemail?userId=${user._id}&token=${token.token}`;
+   const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "https://chatingfrontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app"}/verifyemail?userId=${user._id}&token=${token.token}`;
     
     await sendEmail({
       email: user.email,

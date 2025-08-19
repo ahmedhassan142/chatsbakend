@@ -41,7 +41,7 @@ const registercontroller = (req, res) => __awaiter(void 0, void 0, void 0, funct
             createdAt: new Date(),
             expiresAt: new Date(Date.now() + 3600000), // 1 hour from now
         }).save();
-        const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verifyemail?userId=${user._id}&token=${token.token}`;
+        const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL || "https://chatingfrontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app"}/verifyemail?userId=${user._id}&token=${token.token}`;
         yield (0, sendEmail_js_1.sendEmail)({
             email: user.email,
             subject: "Verify Your Email",
